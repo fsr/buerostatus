@@ -1,9 +1,10 @@
 import serial
+from bottle import route, run
 
-# Read the value from the serial output
+@route('/')
+def index():
+	# Read ~5 values from the serial output
+	# average them
+	# return average
 
-# Save value to local SQLite DB
-
-# Upload value to Kaki
-
-# Don't forget to run this script periodically (via cron every 10 minutes?)
+run(host='localhost', port=1337)
