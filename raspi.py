@@ -1,4 +1,4 @@
-import serial, requests, time, statistics
+import serial, requests, time
 
 def get_status():
     read_string =  None
@@ -14,6 +14,7 @@ def get_status():
           except:
             continue
 
-    return str(int(statistics.median(values)))
+    values = sorted(values)
+    return str(values[int(len(values)/2)])
 
 requests.post('https://www.ifsr.de/buerostatus/input.php', data = {'ts': int(time.time()), 'val': get_status()})
