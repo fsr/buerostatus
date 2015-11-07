@@ -1,4 +1,4 @@
-import pyserial
+import serial
 
 # Read the value from the serial output
 
