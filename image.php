@@ -14,8 +14,6 @@ while ($row != FALSE && count($row)>0) {
         $row = $result->fetchArray();
 }
 
-echo $table;
-
 require_once("jpgraph/src/jpgraph.php");
 require_once("jpgraph/src/jpgraph_line.php");
 require_once("jpgraph/src/jpgraph_date.php");
