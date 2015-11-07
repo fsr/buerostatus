@@ -16,4 +16,4 @@ def get_status():
 
     return str(int(statistics.median(values)))
 
-requests.post('http://www.ifsr.de/buerostatus/input.php', data = {'timestamp': int(time.time()), 'value': get_status()})
+requests.post('http://www.ifsr.de/buerostatus/input.php', data = {'ts': int(time.time()), 'val': get_status()})
