@@ -1,32 +1,33 @@
-import serial
-from bottle import route, run
+import serial, requests
 
-@route('/')
 def get_status():
-    s =  None
+    read_string =  None
+    values = []
 
-    with serial.Serial('/dev/ttyACM0', 9600, timeout=3) as ser:
+    with serial.Serial('/dev/ttyACM0', 9600, timeout=1) as ser:
       
-        while s is None:
+        while len(values) < 10:
           try:
-            s = ser.read(39)
+            read_string = ser.readline()
 
-            print(s)
+            # print(read_string)
+            values.append(read_string.decode().replace('\r\n', ''))
           except:
             continue
   
-    values = s.decode().split('\r\n')
+    # values = read_string.decode().split('\r\n')
     # print(values)
     
     total = 0
     n = 0
 
     for val in values:
-        if len(val) == 3 and '\\' not in val:
+        if len(val) == 3:
             total += int(val)
             n += 1
     
     # print(total/n)
-    return int(total/n)
+    return str(int(total/n))
 
-run(host='localhost', port=1337)
+requests.post('www.ifsr.de/buerostatus/receive.php', data = {'status': get_status()})
+# print(get_status())
