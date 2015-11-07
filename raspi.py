@@ -1,7 +1,7 @@
-import serial, time
+import serial
+from bottle import route, run
 
-# Read the value from the serial output
-
+@route('/')
 def get_status():
     s =  None
 
@@ -29,9 +29,4 @@ def get_status():
     # print(total/n)
     return int(total/n)
 
-get_status()
-# Save value to local SQLite DB
-
-# Upload value to Kaki
-
-# Don't forget to run this script periodically (via cron every 10 minutes?)
+run(host='localhost', port=1337)
