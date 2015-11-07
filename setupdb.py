@@ -1,7 +1,7 @@
 import sqlite3
 import os.path
 
-if not os.path.exists("./server/buerostatus.db"):
+if not os.path.exists("./buerostatus.db"):
 	open("buerostatus.db", "w").close()
 	with sqlite3.connect("buerostatus.db") as conn:
 		cursor = conn.cursor()
