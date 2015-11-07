@@ -29,5 +29,5 @@ def get_status():
     # print(total/n)
     return str(int(total/n))
 
-requests.post('www.ifsr.de/buerostatus/receive.php', data = {'status': get_status()})
+requests.post('http://www.ifsr.de/buerostatus/receive.php', data = {'status': get_status()})
 # print(get_status())
