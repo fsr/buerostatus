@@ -1,4 +1,4 @@
-import serial, requests
+import serial, requests, time, statistics
 
 def get_status():
     read_string =  None
@@ -10,24 +10,10 @@ def get_status():
           try:
             read_string = ser.readline()
 
-            # print(read_string)
-            values.append(read_string.decode().replace('\r\n', ''))
+            values.append(int(read_string))
           except:
             continue
-  
-    # values = read_string.decode().split('\r\n')
-    # print(values)
-    
-    total = 0
-    n = 0
 
-    for val in values:
-        if len(val) == 3:
-            total += int(val)
-            n += 1
-    
-    # print(total/n)
-    return str(int(total/n))
+    return str(int(statistics.median(values)))
 
-requests.post('http://www.ifsr.de/buerostatus/receive.php', data = {'status': get_status()})
-# print(get_status())
+requests.post('http://www.ifsr.de/buerostatus/input.php', data = {'timestamp': int(time.time()), 'value': get_status()})
