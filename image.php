@@ -1,10 +1,10 @@
 <?php
 
-$timeframe = (isset($_GET['h'])) ? 60 * (int)$_GET['h'] : 60 * 48;
+$timeframe = 60 * ((isset($_GET['h'])) ? (int)$_GET['h'] : 48);
 
 $db = new SQLite3("buerostatus.db");
 
-$result = $db->query("SELECT ts, val FROM buerostatus ORDER BY ts LIMIT $timeframe;");
+$result = $db->query("SELECT ts, val FROM buerostatus ORDER BY ts DESC LIMIT $timeframe;");
 
 $row = $result->fetchArray();
 $tss = [];
