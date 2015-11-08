@@ -1,7 +1,6 @@
 <?php
 
-$timeframe = 60 * 48;
-$timeframe = 60 * $_GET['h'];
+$timeframe = (isset($_GET['h'])) ? 60 * (int)$_GET['h'] : 60 * 48;
 
 $db = new SQLite3("buerostatus.db");
 
