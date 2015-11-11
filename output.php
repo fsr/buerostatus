@@ -14,10 +14,13 @@ while ($row != FALSE && count($row)>0) {
 $medianElement = floor($sampleSize/2);
 sort($vals, SORT_NUMERIC);
 $val = $vals[$medianElement];
-
-if ($val > $threshold) {
-        echo 1;
+if(isset($_GET["raw"])) {
+        echo $val;
 } else {
-        echo 0;
+        if ($val > $threshold) {
+                echo 1;
+        } else {
+                echo 0;
+        }
 }
 ?>
