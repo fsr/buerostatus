@@ -10,12 +10,12 @@ $row = $result->fetchArray();
 
 $table = "";
 
-$table .= "<hr /><table border=1>";
+$table .= "<!DOCTYPE html><html><body><hr /><table border=1>";
 while ($row != FALSE && count($row)>0) {
         $table .= "<tr><td>$row[ts]</td><td>$row[val]</td></tr>";
         $row = $result->fetchArray();
 }
-$table .= "</table><hr />";
+$table .= "</table><hr /></body></html>";
 
 echo $table;
 
