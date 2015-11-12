@@ -1,7 +1,7 @@
 <?php
 
 $ip_addr = $_SERVER['REMOTE_ADDR'];
-if($ip_addr === '192.168.1.211'){
+if($ip_addr === '141.76.100.250'){
 	$timestamp = $_POST["ts"];
 	$value = $_POST["val"];
 
