@@ -1,8 +1,10 @@
 <?php
 
+$entries = ((isset($_GET['e'])) ? (int)$_GET['e'] : 10);
+
 $db = new SQLite3("buerostatus.db");
 
-$result = $db->query("SELECT ts, val FROM buerostatus ORDER BY ts;");
+$result = $db->query("SELECT ts, val FROM buerostatus ORDER BY ts DESC LIMIT $entries;");
 
 $row = $result->fetchArray();
 
