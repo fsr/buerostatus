@@ -12,6 +12,7 @@ output.php?raw&median -> Median der letzten 5 Messwerte
 
 $raw = isset($_GET["raw"]);
 $median = isset($_GET["median"]);
+$image = isset($_GET["image"]);
 
 $db = new SQLite3("buerostatus.db");
 $result = $db->query("SELECT val FROM buerostatus ORDER BY id DESC LIMIT $sampleSize;");
@@ -26,13 +27,15 @@ $medianElement = floor($sampleSize/2);
 sort($vals, SORT_NUMERIC);
 
 $val = $median?$vals[$medianElement]:$vals[$sampleSize-1];
-if($raw) {
+$status = ($val > $threshold)?1:0;
+if($image) {
+        header("Cache-Control: no-cache, must-revalidate");
+        header("Expires: Fri, 17 Jul 1992 11:00:00 GMT"); 
+        header("Content-Type: image/png");
+        readfile("$status.png");
+} elseif ($raw) {
         echo $val;
 } else {
-        if ($val > $threshold) {
-                echo 1;
-        } else {
-                echo 0;
-        }
+        echo $status;
 }
 ?>
