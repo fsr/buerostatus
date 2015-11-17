@@ -21,13 +21,20 @@ require_once("jpgraph/src/jpgraph_line.php");
 require_once("jpgraph/src/jpgraph_date.php");
 
 $graph = new Graph(1280,600);
-$graph->SetScale('datlin');
+$graph->SetScale('datlin', 0, 1000, 0, 0);
+$graph->SetMargin(40, 20, 20, 120);
+$graph->xaxis->SetLabelAngle(90);
+$graph->yaxis->SetTextTickInterval(0, 10);
+
+$poss = array();
+for($i=0; $i<=10; $i++)
+        $poss[] = 100*$i;
+
+$graph->yaxis->SetMajTickPositions($poss);
 
 $plot = new LinePlot($vals, $tss);
 $graph->Add($plot);
 $plot->SetColor("#6495ED");
-
-$graph->xaxis->SetLabelAngle(90);
 
 $graph->Stroke();
 
