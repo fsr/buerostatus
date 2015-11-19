@@ -26,7 +26,7 @@ $sampleSize = count($vals);
 $medianElement = floor($sampleSize/2);
 sort($vals, SORT_NUMERIC);
 
-$val = $median?$vals[$medianElement]:$vals[$sampleSize-1];
+$val = $median?$vals[$medianElement]:$vals[0];
 $status = ($val > $threshold)?1:0;
 if($image) {
         header("Cache-Control: no-cache, must-revalidate");
