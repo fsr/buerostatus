@@ -10,12 +10,27 @@ $row = $result->fetchArray();
 
 $table = "";
 
-$table .= "<!DOCTYPE html><html><body><hr /><table border=1>";
+$table .= <<<EOT
+<!DOCTYPE html><html>
+<head>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
+<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#buerostatus').DataTable();
+} );
+</script>
+</head>
+<body>
+<table id="buerostatus" class="display" cellspacing="0" width="100%">
+<thead><tr><th>Timestamp</th><th>Date</th><th>Value</th></tr></thead>
+EOT;
 while ($row != FALSE && count($row)>0) {
-        $table .= "<tr><td>$row[ts]</td><td>$row[val]</td></tr>";
+        $table .= "<tr><td>$row[ts]</td><td>".date("c", $row["ts"])."</td><td>$row[val]</td></tr>";
         $row = $result->fetchArray();
 }
-$table .= "</table><hr /></body></html>";
+$table .= "</table></body></html>";
 
 echo $table;
 
