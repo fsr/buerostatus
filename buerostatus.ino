@@ -1,13 +1,32 @@
-int eingang = A0; // Lichtsensor ist am Analogport 0
-int sensorWert = 0;
+#define aref_voltage 5
+#define max_value 1024.0
+#define lightPin 0
+#define tempPin 1
 
-void setup() {
+int lightReading;
+int tempReading;
+ 
+void setup(void) {
   Serial.begin(9600);
 }
 
-void loop() {
-  sensorWert = analogRead(eingang);
-  Serial.println(sensorWert);
+void loop(void) {
+  // temperature reading based on adafruit sample code
+  // see https://learn.adafruit.com/tmp36-temperature-sensor/using-a-temp-sensor
+  // verified with TMP36 datasheet
+  // see http://www.analog.com/media/en/technical-documentation/data-sheets/TMP35_36_37.pdf
+  tempReading = analogRead(tempPin);    
+  // converting that reading to voltage, which is based off the reference voltage
+  float voltage = (tempReading * aref_voltage) / max_value;
+  // 0.5 V offset, 10mV per degree celsius
+  // 25 C = 0.75 V
+  float temperatureC = (voltage - 0.5) * 100;
+  lightReading = analogRead(lightPin);
+  Serial.print(lightReading);
+  Serial.print(":");
+  Serial.print(tempReading);
+  Serial.print(":");
+  Serial.println(temperatureC);
+  
   delay(10);
 }
-

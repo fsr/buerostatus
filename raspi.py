@@ -3,14 +3,21 @@ import serial, requests, time
 def get_status():
     read_string =  None
     values = []
-
+    temps = []
+    rawtemps = []
     with serial.Serial('/dev/ttyACM0', 9600, timeout=1) as ser:
       
         while len(values) < 10:
           try:
             read_string = ser.readline()
-
-            values.append(int(read_string))
+            # serial port gives bytes instead of string, so decode() it
+            read_array = read_string.decode().split(':')
+            # serial sync sometimes fails
+            if len(read_array) != 3:
+              continue
+            values.append(int(read_array[0]))
+            rawtemps.append(int(read_array[1]))
+            temps.append(float(read_array[2]))
           except:
             continue
 
