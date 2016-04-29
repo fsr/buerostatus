@@ -22,6 +22,9 @@ def get_status():
             continue
 
     values = sorted(values)
-    return str(values[int(len(values)/2)])
+    rawtemps = sorted(rawtemps)
+    temps = sorted(temps)
+    return str(values[int(len(values)/2)]), str(rawtemps[int(len(rawtemps)/2)]), str(temps[int(len(temps)/2)]), 
 
-requests.post('https://www.ifsr.de/buerostatus/input.php', data = {'ts': int(time.time()), 'val': get_status()})
+val, rawtemp, temp = get_status()
+requests.post('https://www.ifsr.de/buerostatus/input.php', data = {'ts': int(time.time()), 'val': val, 'rawtemp': rawtemp, 'temp': temp})
