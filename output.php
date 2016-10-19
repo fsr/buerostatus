@@ -1,6 +1,6 @@
 <?php
 $sampleSize = 5;
-$threshold = 500;
+$threshold = 300;
 
 /*
 Aufruf -> Ausgabe
