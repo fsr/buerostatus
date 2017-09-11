@@ -16,9 +16,9 @@ while ($row != FALSE && count($row)>0) {
         $row = $result->fetchArray();
 }
 
-require_once("jpgraph/src/jpgraph.php");
-require_once("jpgraph/src/jpgraph_line.php");
-require_once("jpgraph/src/jpgraph_date.php");
+require_once("jpgraph/jpgraph.php");
+require_once("jpgraph/jpgraph_line.php");
+require_once("jpgraph/jpgraph_date.php");
 
 $graph = new Graph(1280,600);
 $graph->SetScale('datlin', 0, 1000, 0, 0);
