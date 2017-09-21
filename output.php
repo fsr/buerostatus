@@ -1,6 +1,13 @@
 <?php
 $sampleSize = 5;
 $threshold = 500;
+$frequencies = [2.0,3.0,5.0,15.0,24.0,26.0,41.0,47.0,48.0,49.0,52.0,53.0,63.0,326.0];
+$amplitudes = [55.0,41.0,22.0,35.0,28.0,21.0,21.0,54.0,39.0,26.0,27.0,26.0,26.0,28.0];
+
+function linspace($st,$en,$n){
+    $step = ($en-$st)/($n-1);
+    return range ($st,$en,$step);
+}
 
 /*
 Aufruf -> Ausgabe
@@ -13,14 +20,15 @@ output.php?raw&median -> Median der letzten 5 Messwerte
 $raw = isset($_GET["raw"]);
 $median = isset($_GET["median"]);
 $image = isset($_GET["image"]);
+$predict = isset($_GET["predict"]);
 
 $db = new SQLite3("buerostatus.db");
 $result = $db->query("SELECT val FROM buerostatus ORDER BY id DESC LIMIT $sampleSize;");
 $row = $result->fetchArray();
 $vals = [];
 while ($row != FALSE && count($row)>0) {
-        $vals[] = $row['val'];
-        $row = $result->fetchArray();
+    $vals[] = $row['val'];
+    $row = $result->fetchArray();
 }
 $sampleSize = count($vals);
 $medianElement = floor($sampleSize/2);
@@ -28,14 +36,74 @@ sort($vals, SORT_NUMERIC);
 
 $val = $median?$vals[$medianElement]:$vals[0];
 $status = ($val > $threshold)?1:0;
-if($image) {
-        header("Cache-Control: no-cache, must-revalidate");
-        header("Expires: Fri, 17 Jul 1992 11:00:00 GMT"); 
-        header("Content-Type: image/png");
-        readfile("$status.png");
-} elseif ($raw) {
-        echo $val;
-} else {
-        echo $status;
+
+if ($predict) {
+    $perDay = 24;
+    $hour = date("G");
+    $day = date("z");
+    $month = date("n");
+    $x = linspace($day*1440, ($day+1)*1440, $perDay);
+    $tp = $x[$hour];
+    $prob = 0.0;
+    $in_hour = 0;
+
+    while ($prob < 50) {
+        $in_hour = $in_hour + 1;
+        $tp = $tp + ($x[1]-$x[0]);
+
+        foreach ($frequencies as $index => $freq) {
+            $prob = $prob + $amplitudes[$index] * sin(2.0 * pi() * $freq * $tp);
+        }
+
+        $prob = ($prob + 500)/10;
+
+        if (($hour + $in_hour) % 24 < 7 || ($hour + $in_hour) % 24 > 18) {
+            $prob = 0.33 * $prob;
+        }
+
+        if (in_array($month, [2,3,8,9])) {
+            $prob = 0.5 * $prob;
+        }
+
+        if ($status) {
+            $prob = min(2.0 * $prob, 100);
+        }
+
+        if ($in_hour == 1) { // probability for next hour
+            $cur_prob = round($prob);
+        }
+
+        if ($in_hour > 47) { // avoid long looping until next month
+            $in_hour = ">48";
+            break;
+        }
+    }
 }
+
+if($image) {
+    header("Cache-Control: no-cache, must-revalidate");
+    header("Expires: Fri, 17 Jul 1992 11:00:00 GMT");
+    header("Content-Type: image/png");
+    readfile("$status.png");
+} elseif ($raw) {
+    echo $val;
+} elseif ($predict) {
+    header("Cache-Control: no-cache, must-revalidate");
+    header("Expires: Fri, 17 Jul 1992 11:00:00 GMT");
+    header("Content-Type: image/png");
+
+    $img = ImageCreate(160, 30);
+    $background_color = ImageColorAllocateAlpha ($img, 255, 255, 255, 0);
+    $text_color = ImageColorAllocate ($img, 0, 0, 0);
+
+    if (strlen($in_hour) < 2) {
+        $in_hour = "0".$in_hour;
+    }
+
+    ImageTTFText($img, 18.0, 0, 0, 23, $text_color, "/usr/share/fonts/TTF/DejaVuSans.ttf", $in_hour."h | ".$cur_prob."%");
+    ImagePNG($img);
+} else {
+    echo $status;
+}
+
 ?>
