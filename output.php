@@ -92,7 +92,7 @@ if($image) {
     header("Expires: Fri, 17 Jul 1992 11:00:00 GMT");
     header("Content-Type: image/png");
 
-    $img = ImageCreate(160, 30);
+    $img = ImageCreate(110, 20);
     $background_color = ImageColorAllocateAlpha ($img, 255, 255, 255, 0);
     $text_color = ImageColorAllocate ($img, 0, 0, 0);
 
@@ -100,7 +100,7 @@ if($image) {
         $in_hour = "0".$in_hour;
     }
 
-    ImageTTFText($img, 18.0, 0, 0, 23, $text_color, "/usr/share/fonts/TTF/DejaVuSans.ttf", $in_hour."h | ".$cur_prob."%");
+    ImageString($img, 5, 2, 2, $in_hour."h | ".$cur_prob."%", $text_color);
     ImagePNG($img);
 } else {
     echo $status;
