@@ -93,8 +93,10 @@ if($image) {
     header("Content-Type: image/png");
 
     $img = ImageCreate(110, 20);
-    $background_color = ImageColorAllocateAlpha ($img, 255, 255, 255, 0);
-    $text_color = ImageColorAllocate ($img, 0, 0, 0);
+    $background_color = ImageColorAllocateAlpha($img, 0, 0, 0, 127);
+    $text_color = ImageColorAllocate($img, 0, 0, 0);
+
+    ImageFill($img, 0, 0, $background_colour);
 
     if (strlen($in_hour) < 2) {
         $in_hour = "0".$in_hour;
