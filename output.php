@@ -98,7 +98,7 @@ if($image) {
     $background_color = ImageColorAllocateAlpha($img, 0, 0, 0, 127);
     $text_color = ImageColorAllocate($img, 0, 0, 0);
 
-    ImageFill($img, 0, 0, $background_colour);
+    ImageFill($img, 0, 0, $background_color);
 
     if (strlen($in_hour) < 2) {
         $in_hour = "0".$in_hour;
