@@ -4,6 +4,8 @@ $threshold = 500;
 $frequencies = [2.0,3.0,5.0,15.0,24.0,26.0,41.0,47.0,48.0,49.0,52.0,53.0,63.0,326.0];
 $amplitudes = [55.0,41.0,22.0,35.0,28.0,21.0,21.0,54.0,39.0,26.0,27.0,26.0,26.0,28.0];
 
+date_default_timezone_set("Europe/Berlin");
+
 function linspace($st,$en,$n){
     $step = ($en-$st)/($n-1);
     return range ($st,$en,$step);
