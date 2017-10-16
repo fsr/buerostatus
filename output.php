@@ -47,10 +47,14 @@ if ($predict) {
     $month = date("n");
     $x = linspace($day*1440, ($day+1)*1440, $perDay);
     $tp = $x[$hour];
-    $prob = 0.0;
+    if ($status) {
+        $prob = round($val/10, 2);
+    } else {
+        $prob = 0.0;
+    }
     $in_hour = 0;
 
-    while ($prob < 50) {
+    while (($prob <= 50 && !$status) || ($prob > 50 && $status)) {
         $in_hour = $in_hour + 1;
         $tp = $tp + ($x[1]-$x[0]);
 
@@ -77,7 +81,7 @@ if ($predict) {
         }
 
         if ($status) {
-            $prob = min(2.0 * $prob, 100);
+            $prob = min(1.3 * $prob, 99);
         }
 
         if ($in_hour == 1) { // probability for next hour
