@@ -23,6 +23,7 @@ $raw = isset($_GET["raw"]);
 $median = isset($_GET["median"]);
 $image = isset($_GET["image"]);
 $predict = isset($_GET["predict"]);
+$predictraw = isset($_GET["predictraw"]);
 
 $db = new SQLite3("buerostatus.db");
 $result = $db->query("SELECT val FROM buerostatus ORDER BY id DESC LIMIT $sampleSize;");
@@ -39,7 +40,7 @@ sort($vals, SORT_NUMERIC);
 $val = $median?$vals[$medianElement]:$vals[0];
 $status = ($val > $threshold)?1:0;
 
-if ($predict) {
+if ($predict || $predictraw) {
     $perDay = 24;
     $hour = date("G");
     $day = date("z");
@@ -119,6 +120,8 @@ if($image) {
 
     ImageString($img, 5, 2, 2, $in_hour."h | ".$cur_prob."%", $text_color);
     ImagePNG($img);
+} elseif ($predictraw) {
+    echo $in_hour."h | ".$cur_prob."%";
 } else {
     echo $status;
 }
